@@ -1,0 +1,45 @@
+package Part1;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+public class FirstTest {
+
+    WebDriver driver;
+
+    @BeforeClass
+    public void setup() {
+        System.setProperty("web driver.chrome.driver", "path/to/chromedriver");
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("http://hrms.hkbretail.com:8011/Account/Login");
+    }
+
+    @AfterClass
+    public void tearDown() {
+        //driver.close();
+    }
+
+    @Test
+    public void TestLoggingIntoApplication() throws InterruptedException {
+        Thread.sleep(2000);
+        WebElement username = driver.findElement(By.name("RegNo"));
+        username.sendKeys("CHANGED");
+
+        WebElement password = driver.findElement(By.name("Password"));
+        password.sendKeys("CHANGED");
+
+        driver.findElement(By.cssSelector(".btn.btn-lg.btn-primary.btn-block")).click();
+        Thread.sleep(2000);
+        String actualResult = driver.findElement(By.className("MyInfoWidget__name")).getText();
+        String expectedResult = "Jahanzab";
+        Assert.assertEquals(actualResult, expectedResult);
+
+    }
+}
